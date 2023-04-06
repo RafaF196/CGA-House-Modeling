@@ -1,0 +1,69 @@
+def prod_rules(block):
+    obj = bpy.data.objects[block.id]
+    tag = block.tag
+    
+    # Edit this to generate the rules
+    # if tag -> return Succesor
+    # Operations available: "extrude_face", "subdivide", "add_prefab"
+    
+    ##############################################
+    
+    # House 4
+    if layer == 1:
+        if tag == 'L':
+            return extrude_face(obj, 4, [1.5], 'B')
+        if tag == 'B':
+            extrude_face(obj, 0, [1.5, 2.0], 'N')
+            return extrude_face(obj, 1, [1.5, 2.0], 'BB')
+        if tag == 'BB':
+            return subdivide(obj, 0, [['R', 1], [1.0], ['R', 1], [1.0, 1.5], ['R', 1]], ['S', 'M', 'P', 'M', 'S'], "quartz")
+        if tag == 'S':
+            return extrude_face(obj, 4, [2.0, 2.5], '2M')
+        if tag == 'P':
+            return extrude_face(obj, 4, [1.2, 1.8], '2M')
+        if tag == '2M':
+            return subdivide(obj, 2, [[1.5], ['R', 1]], ['F1', 'F2'], "marble")
+        if tag == 'M':
+            add_prefab(obj, "roof3", 0.8, 4, 'N', "blackstone")
+            add_prefab(obj, "door", 0.5, 3, 'N', "wood")
+            return add_prefab(obj, "door", 0.5, 2, 'N', "wood")
+        if tag == 'F1':
+            add_prefab(obj, "window5", 0.5, 3, 'N', "wood")
+            rng = random.uniform(0.0, 1.0)
+            if rng < 0.5:
+                return add_prefab(obj, "garage", 1, 2, 'N', "concrete")
+            else:
+                return add_prefab(obj, "window5", 0.5, 2, 'N', "wood")
+        if tag == 'F2':
+            add_prefab(obj, "window2", 0.5, 3, 'N', "wood")
+            return add_prefab(obj, "window2", 0.5, 2, 'N', "wood")
+        if tag == 'W':
+            add_prefab(obj, "window6", 0.1, 0, 'N', "blackstone")
+            return add_prefab(obj, "window6", 0.1, 1, 'N', "blackstone")
+        
+    if layer == 2:
+        if tag == 'BB':
+            return subdivide(obj, 2, [['R', 1], [0.15, 0.2]], ['CB', 'CO'], "quartz")
+        if tag == 'CB':
+            rng = random.uniform(0.0, 1.0)
+            if rng < 0.5:
+                return subdivide(obj, 0, [[0.15, 0.2], ['R', 1], [0.15, 0.2]], ['CO', 'N', 'CO'], "blackstone")
+            else:
+                return subdivide(obj, 0, [[0.15, 0.2], ['R', 1]], ['CO', 'N'], "blackstone")
+        if tag == 'CO':
+            extrude_face(obj, 3, [0.5, 0.6], 'N')
+            return extrude_face(obj, 2, [1.5, 1.6], 'N')
+        if tag == 'F2':
+            return subdivide(obj, 2, [['R', 1], [0.15, 0.2]], ['CB', 'CO'], "quartz")
+        
+    if layer == 3:
+        if tag == 'F2':
+            rng = random.uniform(0.0, 1.0)
+            if rng < 0.5:
+                return extrude_face(obj, 0, [0.1, 0.3], 'W')
+            else:
+                return extrude_face(obj, 1, [0.1, 0.3], 'W')
+    
+    ##############################################
+    
+    return [] # tag N

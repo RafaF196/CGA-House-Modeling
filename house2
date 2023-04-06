@@ -1,0 +1,56 @@
+def prod_rules(block):
+    obj = bpy.data.objects[block.id]
+    tag = block.tag
+    
+    # Edit this to generate the rules
+    # if tag -> return Succesor
+    # Operations available: "extrude_face", "subdivide", "add_prefab"
+    
+    ##############################################
+
+    # House 2
+    if layer == 1:
+        if tag == 'L':
+            return extrude_face(obj, 4, [3.5, 4.0], 'B')
+        if tag == 'B':
+            return subdivide(obj, 2, [['R', 1], ['R', 1]], ['FL1', 'FL2'], "concrete")
+        if tag == 'FL1':
+            extrude_face(obj, 0, [0.5, 2.0], 'FL3')
+            return extrude_face(obj, 1, [0.5, 2.0], 'FL3')
+        if tag == 'FL2':
+            return subdivide(obj, 0, [['R', 1], ['R', 1]], ['MID', 'MID'], "concrete")
+        if tag == 'FL3':
+            return subdivide(obj, 0, [['R', 1], ['R', 1]], ['LEFT', 'RIGHT'], "concrete")
+        if tag == 'LEFT':
+            return subdivide(obj, 0, [['R', 2], ['R', 1]], ['G', 'D'], "concrete")
+        if tag == 'RIGHT':
+            return subdivide(obj, 0, [['R', 1], ['R', 2]], ['D', 'G'], "concrete")
+        if tag == 'MID':
+            rng = random.uniform(0.0, 1.0)
+            if rng < 0.5:
+                add_prefab(obj, "roof3", 1, 4, 'N', "redconcrete")
+                return subdivide(obj, 0, [['R', 1], ['R', 1]], ['EW', 'W'], "redconcrete")
+            else:
+                return subdivide(obj, 0, [['R', 1], ['R', 1]], ['W', 'EW'], "marble")
+        if tag == 'G':
+            return add_prefab(obj, "garage", 0.6, 2, 'N', "metal")
+        if tag == 'D':
+            return add_prefab(obj, "door", 1, 2, 'N', "concrete")
+        if tag == 'W':
+            rng = random.uniform(0.0, 1.0)
+            if rng < 0.5:
+                return add_prefab(obj, "window4", 0.5, 2, 'N', "blackstone")
+            else:
+                return add_prefab(obj, "window3", 0.5, 2, 'N', "blackstone")
+        if tag == 'EW':
+            return extrude_face(obj, 2, [0.5, 1.0], 'W')
+        
+    if layer == 2:
+        if tag == 'B':
+            return subdivide(obj, 2, [['R', 1], [0.16], ['R', 1.1]], ['N', 'M', 'N'], "blackstone")
+        if tag == 'M':
+            return extrude_face(obj, 2, [1.0, 1.5], 'N')
+    
+    ##############################################
+    
+    return [] # tag N
